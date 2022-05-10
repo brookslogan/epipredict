@@ -19,7 +19,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Remotes:
-    cmu-delphi/epiprocess#58
+    epiprocess=github::cmu-delphi/epiprocess@lcb/expand-delphi-epidata-r-remote-description
 Imports: 
     dplyr,
     magrittr,
