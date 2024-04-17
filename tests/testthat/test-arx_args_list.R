@@ -111,3 +111,33 @@ test_that("arx_lags_validator handles named & unnamed lists as expected", {
 
   expect_error(arx_lags_validator(pred_vec, lags_init_other_name))
 })
+
+test_that("arx_args_list provided forecast_date and target_date are respected", {
+  horizon <- 7L
+  latency <- 5L
+  ahead <- horizon + latency
+  forecast_date <- as.Date("1234-01-01")
+  target_date <- forecast_date + horizon
+  epi_workflow <- arx_fcast_epi_workflow(
+    case_death_rate_subset,
+    outcome = "case_rate",
+    predictors = c("case_rate"),
+    args_list = arx_args_list(
+      ahead = ahead,
+      forecast_date = forecast_date,
+      target_date = target_date
+    )
+  )
+  expect_identical(
+    extract_frosting(epi_workflow)[["layers"]] %>%
+      `[[`(which(map_lgl(., inherits, "layer_add_forecast_date"))) %>%
+      `[[`("forecast_date"),
+    forecast_date
+  )
+  expect_identical(
+    extract_frosting(epi_workflow)[["layers"]] %>%
+      `[[`(which(map_lgl(., inherits, "layer_add_target_date"))) %>%
+      `[[`("target_date"),
+    target_date
+  )
+})
